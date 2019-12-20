@@ -1,0 +1,86 @@
+on: push
+name: LARAVEL DUSK
+jobs:
+  dusk:
+    runs-on: ubuntu-latest
+    container:
+      image: kirschbaumdevelopment/laravel-test-runner:7.3.0
+      options: --shm-size=2048M --cpus 2
+
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_ROOT_PASSWORD: secret
+          MYSQL_DATABASE: default
+        ports:
+          - 33306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+
+      - name: Install chrome
+        run: |
+          apt-get update
+          apt-get install -y libnss3 chromium-browser --fix-missing
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: |
+          echo "::set-output name=dir::$(composer config cache-files-dir)"
+      - uses: actions/cache@v1
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+      - name: Install composer dependencies
+        run: |
+          composer install --no-scripts --ignore-platform-reqs
+      - name: Get yarn cache
+        id: yarn-cache
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - uses: actions/cache@v1
+        with:
+          path: ${{ steps.yarn-cache.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      - name: Update npm
+        run: npm install -g npm@latest
+
+      - name: Install yarn dependencies and compile
+        run: |
+          ./frontend/yarn install --frozen-lockfile --ignore-engines
+          ./frontend/yarn build
+      - name: Copy .env
+        run: |
+          cp .env.dusk.ci .env
+          cp phpunit.ci.xml phpunit.xml
+          php artisan key:generate
+      - name: Upgrade Chrome Driver
+        run: php artisan dusk:chrome-driver
+
+      - name: Start Chrome Driver
+        run: ./vendor/laravel/dusk/bin/chromedriver-linux > /dev/null 2>&1 &
+
+      - name: Run Laravel Server
+        run: php artisan serve > /dev/null 2>&1 &
+
+      - name: Run Dusk Tests
+        run: php artisan dusk
+
+      - uses: actions/upload-artifact@v1
+        if: failure()
+        with:
+          name: screenshots
+          path: tests/Browser/screenshots
+
+      - uses: actions/upload-artifact@v1
+        if: failure()
+        with:
+          name: logs
+          path: storage/logs

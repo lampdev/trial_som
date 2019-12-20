@@ -1,0 +1,37 @@
+on: push
+name: QA
+jobs:
+  qa:
+    runs-on: ubuntu-latest
+    container:
+      image: kirschbaumdevelopment/laravel-test-runner:7.3.0
+      options: --shm-size=2048M --cpus 2
+
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+
+      - name: Installl ast
+        run: |
+          apt-get update
+          apt-get install -y php7.3-dev php-pear
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: |
+          echo "::set-output name=dir::$(composer config cache-files-dir)"
+      - uses: actions/cache@v1
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+      - name: Install composer dependencies
+        run: |
+          composer install --no-scripts --ignore-platform-reqs
+
+      - name: Phan
+        run: ./vendor/bin/phan
+
+      - name: Phpcs
+        run: ./vendor/bin/phpcs

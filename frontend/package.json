@@ -1,0 +1,47 @@
+{
+  "name": "videoreviews",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "rm -rf ../public/{js,css,img} && vue-cli-service build --no-clean",
+    "lint": "vue-cli-service lint"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome": "^1.1.7",
+    "@fortawesome/fontawesome-free-brands": "^5.0.12",
+    "@fortawesome/fontawesome-free-regular": "^5.0.12",
+    "@fortawesome/fontawesome-free-solid": "^5.0.12",
+    "@fortawesome/vue-fontawesome": "^0.0.22",
+    "axios": "^0.18.0",
+    "bootstrap": "^4.4.1",
+    "bootstrap-vue": "^2.1.0",
+    "jquery": "^3.3.1",
+    "js-cookie": "^2.2.0",
+    "laravel-echo": "^1.4.0",
+    "popper.js": "^1.14.3",
+    "sweetalert2": "^7.19.3",
+    "vform": "^1.0.0",
+    "vue": "^2.6.11",
+    "vue-i18n": "^8.1.0",
+    "vue-lazyload": "^1.2.6",
+    "vue-meta": "^1.5.5",
+    "vue-router": "^3.0.1",
+    "vuex": "^3.0.1",
+    "vuex-router-sync": "^5.0.0"
+  },
+  "devDependencies": {
+    "@babel/plugin-syntax-dynamic-import": "^7.0.0",
+    "@vue/cli-plugin-babel": "^3.8.0",
+    "@vue/cli-plugin-eslint": "^3.8.0",
+    "@vue/cli-service": "^3.8.0",
+    "@vue/eslint-config-standard": "^4.0.0",
+    "babel-eslint": "^10.0.1",
+    "babel-plugin-component": "^1.1.1",
+    "eslint": "^5.16.0",
+    "eslint-plugin-vue": "^5.0.0",
+    "node-sass": "^4.9.0",
+    "sass-loader": "^7.0.1",
+    "vue-template-compiler": "^2.6.11"
+  }
+}
