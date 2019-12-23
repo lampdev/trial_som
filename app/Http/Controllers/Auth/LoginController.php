@@ -23,6 +23,8 @@ class LoginController extends Controller
     /**
      * Attempt to log the user into the application.
      *
+     * @suppress PhanUndeclaredMethod
+     *
      * @param  \Illuminate\Http\Request  $request
      * @return bool
      */
@@ -42,8 +44,10 @@ class LoginController extends Controller
     /**
      * Send the response after the user was authenticated.
      *
+     * @suppress PhanUndeclaredMethod
+     *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return array
      */
     protected function sendLoginResponse(Request $request)
     {

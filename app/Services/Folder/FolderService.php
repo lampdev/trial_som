@@ -8,7 +8,7 @@ use App\Models\Folder;
 
 class FolderService
 {
-    /** @var App\Repositories\Folder\FolderRepository*/
+    /** @var \App\Repositories\Folder\FolderRepository*/
     private $folderRepository;
 
     /**
@@ -73,5 +73,16 @@ class FolderService
     public function getByParentId(int $id): iterable
     {
         return $this->folderRepository->getByParentId($id);
+    }
+
+    /**
+     * @param integer $id
+     * @param integer $parent_id
+     * @param string  $title
+     * @return iterable
+     */
+    public function getByUserIdAndParentId(int $id, int $parent_id, string $title): ?int
+    {
+        return $this->folderRepository->getByUserIdAndParentId($id, Auth::id(), $parent_id, $title);
     }
 }

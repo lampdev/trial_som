@@ -3,22 +3,21 @@
 namespace App\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
-use App\Repositories\Folder\FolderRepository;
-use Illuminate\Support\Facades\Auth;
+use App\Services\Folder\FolderService;
 
 class UniqueFolder implements Rule
 {
-    /** @var App\Repositories\Folder\FolderRepository*/
-    private $folderRepository;
+    /** @var \App\Services\Folder\FolderService*/
+    private $folderService;
 
     /**
-     * FolderRepository $folderRepository
+     * FolderService $folderService
      *
      * @return void
      */
-    public function __construct(FolderRepository $folderRepository)
+    public function __construct(FolderService $folderService)
     {
-        $this->folderRepository = $folderRepository;
+        $this->folderService = $folderService;
     }
 
     /**
@@ -28,14 +27,15 @@ class UniqueFolder implements Rule
      * @param  mixed  $value
      * @return bool
      */
-    public function passes($attribute, $value)
+    public function passes($attribute, $value): bool
     {
-        $item = $this->folderRepository->getByUserIdAndParentId(request()->get('id'), Auth::id(), request()->get('parent_id'), $value);
-        if (!empty($item)) {
-            return false;
-        } else {
-            return true;
-        }
+        $item = $this->folderService->getByUserIdAndParentId(
+            request()->get('id'),
+            request()->get('parent_id'),
+            $value
+        );
+
+        return empty($item);
     }
 
     /**
@@ -43,7 +43,7 @@ class UniqueFolder implements Rule
      *
      * @return string
      */
-    public function message()
+    public function message(): string
     {
         return 'That folder name already exists';
     }

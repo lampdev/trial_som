@@ -47,7 +47,14 @@ class FolderRepository extends AbstractRepository
             ->orderBy('created_at', 'desc')->get();
     }
 
-    public function getByUserIdAndParentId(int $id, int $user_id, int $parent_id, string $title)
+    /**
+     * @param integer $id
+     * @param integer $user_id
+     * @param integer $parent_id
+     * @param string  $title
+     * @return integer
+     */
+    public function getByUserIdAndParentId(int $id, int $user_id, int $parent_id, string $title): ?int
     {
         return $this->model->where([
             ['user_id', $user_id],

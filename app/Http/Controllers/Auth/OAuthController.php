@@ -28,8 +28,10 @@ class OAuthController extends Controller
     /**
      * Redirect the user to the provider authentication page.
      *
+     * @suppress PhanUndeclaredMethod
+     *
      * @param  string $provider
-     * @return \Illuminate\Http\RedirectResponse
+     * @return array
      */
     public function redirectToProvider($provider)
     {
@@ -41,8 +43,10 @@ class OAuthController extends Controller
     /**
      * Obtain the user information from the provider.
      *
+     * @suppress PhanUndeclaredMethod
+     *
      * @param  string $driver
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function handleProviderCallback($provider)
     {
@@ -81,7 +85,7 @@ class OAuthController extends Controller
         }
 
         if (User::where('email', $user->getEmail())->exists()) {
-            throw new EmailTakenException;
+            throw new EmailTakenException();
         }
 
         return $this->createUser($provider, $user);
@@ -90,7 +94,7 @@ class OAuthController extends Controller
     /**
      * @param  string $provider
      * @param  \Laravel\Socialite\Contracts\User $sUser
-     * @return \App\User
+     * @return \App\Models\User|false
      */
     protected function createUser($provider, $sUser)
     {

@@ -3,7 +3,7 @@
     {{ $t('you_are_logged_in') }}
     <b-button
       variant="primary"
-      @click="$route.push({name: 'folder'}) "
+      @click="$route.push({name: 'folder'})"
     >
       Folders
     </b-button>
@@ -16,6 +16,6 @@ export default {
 
   metaInfo () {
     return { title: this.$t('home') }
-  },
+  }
 }
 </script>

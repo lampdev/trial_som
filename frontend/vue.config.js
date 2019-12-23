@@ -1,9 +1,9 @@
 module.exports = {
   // proxy API requests to Valet during development
   devServer: {
-    /*historyApiFallback: true,
+    /* historyApiFallback: true,
     noInfo: true,
-    port: 8080,*/
+    port: 8080, */
     overlay: true,
     public: 'videoreviews.test',
     proxy: {

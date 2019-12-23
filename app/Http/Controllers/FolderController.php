@@ -10,7 +10,7 @@ use App\Http\Requests\FolderRequest;
 
 class FolderController extends Controller
 {
-    /** @var App\Service\Folder\FolderService*/
+    /** @var \App\Services\Folder\FolderService*/
     private $folderService;
 
     /**

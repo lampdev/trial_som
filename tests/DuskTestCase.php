@@ -54,6 +54,8 @@ abstract class DuskTestCase extends BaseTestCase
                 '--disable-gpu',
                 '--headless',
                 '--no-sandbox',
+                '--ignore-ssl-errors',
+                '--whitelisted-ips=""',
                 '--window-size=1920,1080'
             ]
         );

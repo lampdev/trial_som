@@ -81,7 +81,7 @@ export default {
       } else {
         return 'Create Folder'
       }
-    },
+    }
   }
 }
 </script>
