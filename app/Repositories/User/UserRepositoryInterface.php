@@ -4,7 +4,7 @@ namespace App\Repositories\User;
 
 use App\Repositories\AbstractInterface;
 
-Interface UserRepositoryInterface extends AbstractInterface
+interface UserRepositoryInterface extends AbstractInterface
 {
     /**
      * @param array $data

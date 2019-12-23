@@ -33,7 +33,7 @@ class ErrorCatch
     {
         $response = $next($request);
 
-        if(!empty($response->exception)) {
+        if (!empty($response->exception)) {
             $response = $this->errorService->push($request);
         }
 

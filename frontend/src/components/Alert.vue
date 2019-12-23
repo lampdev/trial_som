@@ -22,7 +22,7 @@ export default {
     },
     folderName: {
       type: String,
-      required: true 
+      required: true
     },
     isRestore: {
       type: Boolean,
@@ -38,10 +38,10 @@ export default {
   },
 
   methods: {
-    countDownChanged(dismissCountDown) {
+    countDownChanged (dismissCountDown) {
       this.dismissCountDown = dismissCountDown
     },
-    showAlert() {
+    showAlert () {
       this.dismissCountDown = this.dismissSecs
     },
     getAlerText () {

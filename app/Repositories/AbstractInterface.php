@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-Interface AbstractInterface
+interface AbstractInterface
 {
     /**
      * @param int $id

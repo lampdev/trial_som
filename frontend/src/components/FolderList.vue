@@ -6,8 +6,8 @@
     <b-card>
       <b-row>
         <b-col @click="test(item.id)" cols="8">
-          <i class="fas fa-folder"></i> 
-          {{item.title}}    
+          <i class="fas fa-folder"></i>
+          {{item.title}}
         </b-col>
         <b-col cols="4">
           <b-dropdown variant="link" toggle-class="text-decoration-none" no-caret>

@@ -7,15 +7,15 @@ jobs:
       image: kirschbaumdevelopment/laravel-test-runner:7.3.0
       options: --shm-size=2048M --cpus 2
 
-    services:
-      mysql:
-        image: mysql:5.7
-        env:
-          MYSQL_ROOT_PASSWORD: secret
-          MYSQL_DATABASE: default
-        ports:
-          - 33306:3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+    # services:
+    #   mysql:
+    #     image: mysql:5.7
+    #     env:
+    #       MYSQL_ROOT_PASSWORD: secret
+    #       MYSQL_DATABASE: default
+    #     ports:
+    #       - 33306:3306
+    #     options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
       - uses: actions/checkout@v1
@@ -35,10 +35,15 @@ jobs:
       - name: Install composer dependencies
         run: |
           composer install --no-scripts --ignore-platform-reqs
+      - name: Create DB and schemas
+        working-directory: database
+        run: |
+          touch database.sqlite
       - name: Copy .env
         run: |
           cp .env.dusk.ci .env
           cp phpunit.ci.xml phpunit.xml
           php artisan key:generate
+          php artisan migrate
       - name: Run Testsuite
         run: vendor/bin/phpunit

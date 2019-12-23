@@ -1,5 +1,5 @@
 <template>
-	<div>
+  <div>
     <Alert
       :folderName="folderNameForAlert"
       :isCreate="isCreate"
@@ -7,24 +7,24 @@
       @undo-delete-folder="undoDeleteFolder"
       ref="alert"
     />
-		<b-card title="Folders">
+    <b-card title="Folders">
       <FolderList
         :folders="folders"
         @edit="editFolder"
         @delete="deleteFolder"
       />
-			<b-button @click="openModal()">New Folder</b-button>
-		</b-card>
-		<NewFolder
-			ref="folder"
-			:form="newFolder"
+      <b-button @click="openModal()">New Folder</b-button>
+    </b-card>
+    <NewFolder
+      ref="folder"
+      :form="newFolder"
       :isEdit="isEdit"
-			@close="closeModal"
-			@create="addFolder"
+      @close="closeModal"
+      @create="addFolder"
       @hide-modal="resetForm"
       @update="updateFolder"
-		/>
-	</div>
+    />
+  </div>
 </template>
 
 <script>
@@ -36,13 +36,13 @@ import Alert from '@/components/Alert'
 import Vue from 'vue'
 
 export default {
-	data () {
-		return {
-			newFolder: new Form({
+  data () {
+    return {
+      newFolder: new Form({
         id: 0,
-				title: '',
-				parent_id: 0
-			}),
+        title: '',
+        parent_id: 0
+      }),
       folders: [],
       isEdit: false,
       idEditFolder: null,
@@ -51,30 +51,30 @@ export default {
       isCreate: true,
       lastDeleteIdFolder: null,
       isRestore: false
-		}
-	},
+    }
+  },
 
-	components: {
+  components: {
     NewFolder,
     FolderList,
     Alert
   },
-  
+
   async mounted () {
     const { data } = await axios.get(process.env.VUE_APP_BACKEND_URL + '/api/folders/')
     this.folders = data.data
   },
 
-	methods: {
-		openModal () {
+  methods: {
+    openModal () {
       this.isEdit = false
       this.$refs.folder.show()
-		},
-		closeModal () {
-			this.newFolder.reset()
-		},
-		async addFolder () {
-      const {data} = await this.newFolder.post(process.env.VUE_APP_BACKEND_URL + '/api/folders/')
+    },
+    closeModal () {
+      this.newFolder.reset()
+    },
+    async addFolder () {
+      const { data } = await this.newFolder.post(process.env.VUE_APP_BACKEND_URL + '/api/folders/')
       this.folderNameForAlert = data.data.title
       this.isCreate = true
       this.isRestore = false
@@ -117,6 +117,6 @@ export default {
       this.isRestore = true
       this.$refs.alert.restore()
     }
-	}
+  }
 }
 </script>

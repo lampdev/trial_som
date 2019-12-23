@@ -16,14 +16,14 @@
       <b-button @click="openModal()">New Folder</b-button>
     </b-card>
     <NewFolder
-			ref="folder"
-			:form="newFolder"
+      ref="folder"
+      :form="newFolder"
       :isEdit="isEdit"
-			@close="closeModal"
-			@create="addFolder"
+      @close="closeModal"
+      @create="addFolder"
       @hide-modal="resetForm"
       @update="updateFolder"
-		/>
+    />
   </div>
 </template>
 <script>
@@ -36,7 +36,7 @@ import Vue from 'vue'
 
 export default {
   data () {
-		return {
+    return {
       folders: [],
       isEdit: false,
       idEditFolder: null,
@@ -47,13 +47,13 @@ export default {
       isRestore: false,
       newFolder: new Form({
         id: 0,
-				title: '',
-				parent_id: 0
-			}),
-		}
-	},
+        title: '',
+        parent_id: 0
+      })
+    }
+  },
 
-	components: {
+  components: {
     NewFolder,
     FolderList,
     Alert
@@ -61,24 +61,24 @@ export default {
 
   async mounted () {
     this.getFolders()
-    let parent_id = this.$route.params.folder_id
+    let parentId = this.$route.params.folder_id
     this.newFolder = new Form({
       id: 0,
       title: '',
-      parent_id: parent_id
+      parent_id: parentId
     })
   },
 
   methods: {
-		openModal () {
+    openModal () {
       this.isEdit = false
       this.$refs.folder.show()
-		},
-		closeModal () {
-			this.newFolder.reset()
-		},
-		async addFolder () {
-      const {data} = await this.newFolder.post(process.env.VUE_APP_BACKEND_URL + '/api/folders')
+    },
+    closeModal () {
+      this.newFolder.reset()
+    },
+    async addFolder () {
+      const { data } = await this.newFolder.post(process.env.VUE_APP_BACKEND_URL + '/api/folders')
       this.folderNameForAlert = data.data.title
       this.isCreate = true
       this.isRestore = false
@@ -130,12 +130,12 @@ export default {
 
   watch: {
     $route () {
-      this.getFolders();
-      let parent_id = this.$route.params.folder_id
+      this.getFolders()
+      let parentId = this.$route.params.folder_id
       this.newFolder = new Form({
         id: 0,
         title: '',
-				parent_id: parent_id
+        parent_id: parentId
       })
     }
   }

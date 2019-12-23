@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Folder extends Model
 {
     use SoftDeletes;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -24,15 +25,15 @@ class Folder extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function parent()
+    public function parent(): BelongsTo
     {
         return $this->belongsTo('App\Models\Folder', 'id', 'parent_id');
     }
 
     /**
-     * @return Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function children()
+    public function children(): HasMany
     {
         return $this->hasMany('App\Models\Folder', 'parent_id', 'id');
     }

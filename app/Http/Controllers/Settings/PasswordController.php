@@ -22,6 +22,9 @@ class PasswordController extends Controller
 
     /**
      * Update the user's password.
+     *
+     * PhanUndeclaredConstant
+     *
      * @param UpdatePassword $request
      * @return mixed
      */

@@ -7,15 +7,17 @@ jobs:
       image: kirschbaumdevelopment/laravel-test-runner:7.3.0
       options: --shm-size=2048M --cpus 2
 
-    services:
-      mysql:
-        image: mysql:5.7
-        env:
-          MYSQL_ROOT_PASSWORD: secret
-          MYSQL_DATABASE: default
-        ports:
-          - 33306:3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+    # services:
+    #   mysql:
+    #     image: mysql:5.7
+    #     env:
+    #       MYSQL_ROOT_PASSWORD: root
+    #       MYSQL_DATABASE: default
+    #       MYSQL_USER: default
+    #       MYSQL_PASSWORD: secret
+    #     ports:
+    #       - 33306:3306
+    #     options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
       - uses: actions/checkout@v1
@@ -26,6 +28,11 @@ jobs:
         run: |
           apt-get update
           apt-get install -y libnss3 chromium-browser --fix-missing
+          apt-get -y install libxpm4 libxrender1 libgtk2.0-0 \
+          libnss3 libgconf-2-4 chromium-browser \
+          xvfb gtk2-engines-pixbuf xfonts-cyrillic \
+          xfonts-100dpi xfonts-75dpi xfonts-base \
+          xfonts-scalable imagemagick x11-apps
       - name: Get Composer Cache Directory
         id: composer-cache
         run: |
@@ -53,22 +60,37 @@ jobs:
         run: npm install -g npm@latest
 
       - name: Install yarn dependencies and compile
+        working-directory: frontend
         run: |
-          ./frontend/yarn install --frozen-lockfile --ignore-engines
-          ./frontend/yarn build
+          cp .env.example .env
+          yarn install --frozen-lockfile --ignore-engines
+          yarn build
+      - name: Create DB and schemas
+        working-directory: database
+        run: |
+          touch database.sqlite
       - name: Copy .env
         run: |
           cp .env.dusk.ci .env
           cp phpunit.ci.xml phpunit.xml
           php artisan key:generate
+          php artisan migrate
+          php artisan optimize
+          echo "127.0.0.1    som.test" >> /etc/hosts
+          cat /etc/hosts
+      - name: Start xvfb
+        run: |
+          /usr/bin/Xvfb :0 -screen 0 1280x720x24 > /dev/null 2>&1 &
       - name: Upgrade Chrome Driver
-        run: php artisan dusk:chrome-driver
+        run: |
+          php artisan dusk:update
+          php artisan dusk:chrome-driver 72
 
       - name: Start Chrome Driver
         run: ./vendor/laravel/dusk/bin/chromedriver-linux > /dev/null 2>&1 &
 
       - name: Run Laravel Server
-        run: php artisan serve > /dev/null 2>&1 &
+        run: php artisan serve --host=som.test --port=8000 > /dev/null 2>&1 &
 
       - name: Run Dusk Tests
         run: php artisan dusk

@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-Interface AbstractInterface
+interface AbstractInterface
 {
 
 }

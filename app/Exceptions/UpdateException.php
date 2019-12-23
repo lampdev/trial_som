@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: user
@@ -47,5 +48,4 @@ class UpdateException extends Exception
             'internalCode' => ExceptionConstants::DB_REQUEST_EXCEPTION
         ]))->response()->setStatusCode(HttpConstants::HTTP_SERVER_ERROR);
     }
-
 }
